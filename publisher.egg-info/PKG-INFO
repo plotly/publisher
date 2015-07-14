@@ -1,0 +1,13 @@
+Metadata-Version: 1.0
+Name: publisher
+Version: 0.12
+Summary: UNKNOWN
+Home-page: https://github.com/plotly/documentation
+Author: chris p
+Author-email: chris@plot.ly
+License: See LICENSE.txt
+Description: Convert an IPython notebook into an HTML file that can be consumed
+        by GitHub pages in plotly's documentation repo.
+        
+        
+Platform: UNKNOWN
