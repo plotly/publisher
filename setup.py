@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name='publisher',
-    version='0.001',
+    version='0.1',
     author='chris p',
     author_email='chris@plot.ly',
     packages=['publisher'],

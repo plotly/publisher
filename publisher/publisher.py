@@ -51,7 +51,7 @@ def publish(notebook_name, url_path, page_title, page_description,
                   'Remember to save, always save.')
 
     parts = url_path.split('/')
-    if len(parts) != 2:
+    if len(parts) > 2:
         warnings.warn('Your URL has more than 2 parts... are you sure?')
     if url_path[-1] == '/':
         url_path = url_path[:-1]
