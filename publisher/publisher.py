@@ -51,7 +51,7 @@ def publish(notebook_name, url_path, page_title, page_description,
                   'Remember to save, always save.')
 
     parts = url_path.split('/')
-    if len(parts) > 2:
+    if len(parts) > 3:
         warnings.warn('Your URL has more than 2 parts... are you sure?')
     if url_path[-1] == '/':
         url_path = url_path[:-1]
@@ -71,12 +71,22 @@ def publish(notebook_name, url_path, page_title, page_description,
     fn = notebook_name
     tmpfn = 'temp-{}'.format(fn)
     nbjson = json.load(open(fn))
-    nbjson['cells'] = nbjson['cells'][:-ignore_last_n_cells]
+    if 'cells' in nbjson:
+        nbjson['cells'] = nbjson['cells'][:-ignore_last_n_cells]
+    elif 'worksheets' in nbjson:
+        if len(nbjson['worksheets']) != 1:
+            raise Exception('multiple worksheets?')
+        elif 'cells' in nbjson['worksheets'][0]:
+            nbjson['worksheets'][0]['cells'] = nbjson['worksheets'][0]['cells'][:-ignore_last_n_cells]
+        else:
+            raise Exception('cells not in worksheets[0]?')
+    else:
+        raise Exception('unknown ipython notebook format')
     with open(tmpfn, 'w') as f:
         f.write(json.dumps(nbjson))
 
     exporter = HTMLExporter(template_file='basic')
-    html = exporter.from_filename('temp-Plotly Offline.ipynb')[0]
+    html = exporter.from_filename(tmpfn)[0]
 
     with open('2015-06-30-' + fn.replace('.ipynb', '.html'), 'w') as f:
         f.write('\n'.join([''
@@ -84,8 +94,8 @@ def publish(notebook_name, url_path, page_title, page_description,
                            'permalink: ' + url_path,
                            'layout: user-guide',
                            'page_type: u-guide',
-                           'description: ' + page_description,
-                           'name: ' + page_title,
+                           'description: ' + page_description.replace(':', '&#58;'),
+                           'name: ' + page_title.replace(':', '&#58;'),
                            'language: python',
                            'has_thumbnail: ' + has_thumbnail,
                            'thumbnail: ' + thumbnail_url,
