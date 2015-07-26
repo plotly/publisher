@@ -11,7 +11,7 @@ DEFAULT_THUMBNAIL_URL = '/images/static-image'
 def publish(notebook_name, url_path, page_title, page_description,
             ignore_last_n_cells=2, uses_plotly_offline=False,
             thumbnail_url=DEFAULT_THUMBNAIL_URL,
-            language='python'):
+            language='python', **kwargs):
     '''
     Convert an IPython notebook into an HTML file that can be consumed
     by GitHub pages in plotly's documentation repo.
@@ -88,17 +88,19 @@ def publish(notebook_name, url_path, page_title, page_description,
     exporter = HTMLExporter(template_file='basic')
     html = exporter.from_filename(tmpfn)[0]
 
+    kwargs.setdefault('layout', 'user-guide')
+    kwargs.setdefault('page_type', 'u-guide')
+    kwargs.setdefault('language', 'python')
+
     with open('2015-06-30-' + fn.replace('.ipynb', '.html'), 'w') as f:
         f.write('\n'.join([''
                            '---',
                            'permalink: ' + url_path,
-                           'layout: user-guide',
-                           'page_type: u-guide',
                            'description: ' + page_description.replace(':', '&#58;'),
                            'name: ' + page_title.replace(':', '&#58;'),
-                           'language: python',
                            'has_thumbnail: ' + has_thumbnail,
                            'thumbnail: ' + thumbnail_url,
+                           '\n'.join(['{}: {}'.format(k, v) for k, v in kwargs]),
                            '---',
                            '{% raw %}'
                            ]))
