@@ -100,7 +100,7 @@ def publish(notebook_name, url_path, page_title, page_description,
                            'name: ' + page_title.replace(':', '&#58;'),
                            'has_thumbnail: ' + has_thumbnail,
                            'thumbnail: ' + thumbnail_url,
-                           '\n'.join(['{}: {}'.format(k, v) for k, v in kwargs]),
+                           '\n'.join(['{}: {}'.format(k, v) for k, v in kwargs.iteritems()]),
                            '---',
                            '{% raw %}'
                            ]))
