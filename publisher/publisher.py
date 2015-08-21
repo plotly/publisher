@@ -10,7 +10,7 @@ DEFAULT_THUMBNAIL_URL = '/images/static-image'
 
 def publish(notebook_name, url_path, page_title, page_description,
             ignore_last_n_cells=2, uses_plotly_offline=False,
-            thumbnail_url=DEFAULT_THUMBNAIL_URL,
+            thumbnail=DEFAULT_THUMBNAIL_URL,
             language='python', **kwargs):
     '''
     Convert an IPython notebook into an HTML file that can be consumed
@@ -33,7 +33,7 @@ def publish(notebook_name, url_path, page_title, page_description,
                            this to True. This will include an extra lib
                            (jquery) that is included in ipython notebook,
                            but not included in gh-pages
-    - thumbnail_url: Used as a thumbnail image on the notebook splash
+    - thumbnail: Used as a thumbnail image on the notebook splash
                      (if applicable) and as the image when sharing the
                      notebook as a tweet, a facebook post, etc.
                      Can be relative to the repo, eg '/images/static-image'
@@ -47,6 +47,10 @@ def publish(notebook_name, url_path, page_title, page_description,
             'How to use Plotly offline inside IPython notebooks with Plotly Offline',
              uses_plotly_offline=True)
     '''
+    # backwards compatability
+    if 'thumbnail_url' in kwargs and kwargs['thumbnail'] == DEFAULT_THUMBNAIL_URL:
+        kwargs['thumbnail'] = kwargs['thumbnail_url']
+
     warnings.warn('Did you "Save" this notebook before running this command? '
                   'Remember to save, always save.')
 
@@ -61,7 +65,7 @@ def publish(notebook_name, url_path, page_title, page_description,
                         "and it's gotta be <= than 160."
                         .format(len(page_description)))
 
-    if thumbnail_url == DEFAULT_THUMBNAIL_URL:
+    if thumbnail == DEFAULT_THUMBNAIL_URL:
         has_thumbnail = 'false'
     else:
         has_thumbnail = 'true'
@@ -99,7 +103,7 @@ def publish(notebook_name, url_path, page_title, page_description,
                            'description: ' + page_description.replace(':', '&#58;'),
                            'name: ' + page_title.replace(':', '&#58;'),
                            'has_thumbnail: ' + has_thumbnail,
-                           'thumbnail: ' + thumbnail_url,
+                           'thumbnail: ' + thumbnail,
                            '\n'.join(['{}: {}'.format(k, v) for k, v in kwargs.iteritems()]),
                            '---',
                            '{% raw %}'
