@@ -10,8 +10,7 @@ DEFAULT_THUMBNAIL_URL = '/images/static-image'
 
 def publish(notebook_name, url_path, page_title, page_description,
             ignore_last_n_cells=2, uses_plotly_offline=False,
-            thumbnail=DEFAULT_THUMBNAIL_URL,
-            language='python', **kwargs):
+            thumbnail=DEFAULT_THUMBNAIL_URL, **kwargs):
     '''
     Convert an IPython notebook into an HTML file that can be consumed
     by GitHub pages in plotly's documentation repo.
