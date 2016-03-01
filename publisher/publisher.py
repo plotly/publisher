@@ -56,8 +56,8 @@ def publish(notebook_name, url_path, page_title, page_description,
     parts = url_path.split('/')
     if len(parts) > 3:
         warnings.warn('Your URL has more than 2 parts... are you sure?')
-    if url_path[-1] == '/':
-        url_path = url_path[:-1]
+    #if url_path[-1] == '/':
+    #    url_path = url_path[:-1]
     if len(page_description) > 160:
         raise Exception("Shorten up that page_description! "
                         "Your description was {} characters, "
