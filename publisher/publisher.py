@@ -110,7 +110,7 @@ def publish(notebook_name, url_path, page_title, page_description,
         if uses_plotly_offline:
             f.write(
                 '<script type="text/javascript" '
-                '        src="https://code.jquery.com/jquery-2.1.4.min.js">'
+                '        src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.2/require.js">'
                 '</script>'
             )
         f.write(html.encode('utf8'))
