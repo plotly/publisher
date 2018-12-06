@@ -95,8 +95,8 @@ def publish(notebook_name, url_path, page_title, page_description,
     kwargs.setdefault('page_type', 'u-guide')
     kwargs.setdefault('language', 'python')
 
-    with open('2015-06-30-' + fn.replace('.ipynb', '.html'), 'w') as f:
-        f.write('\n'.join([''
+    with open('2015-06-30-' + fn.replace('.ipynb', '.html'), 'wb') as f:
+        header = '\n'.join([''
                            '---',
                            'permalink: ' + url_path,
                            'description: ' + page_description.replace(':', '&#58;'),
@@ -106,13 +106,14 @@ def publish(notebook_name, url_path, page_title, page_description,
                            '\n'.join(['{}: {}'.format(k, v) for k, v in kwargs.items()]),
                            '---',
                            '{% raw %}'
-                           ]))
+                           ])
+        f.write(header.encode('utf8'))
         if uses_plotly_offline:
             f.write(
-                '<script type="text/javascript" '
+                ('<script type="text/javascript" '
                 '        src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.2/require.js">'
-                '</script>'
+                '</script>').encode('utf8')
             )
         f.write(html.encode('utf8'))
-        f.write('{% endraw %}')
+        f.write('{% endraw %}'.encode('utf8'))
     os.remove(tmpfn)
